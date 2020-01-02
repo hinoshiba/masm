@@ -1,0 +1,32 @@
+        ASSUME CS:CODE, DS:CODE
+CODE    SEGMENT
+
+        ORG 100H
+START:  MOV BX, 0
+NOINPUT:MOV AH, 06H
+        MOV DL, 0FFH
+        INT 21H
+        JNZ PRINT
+        INC BX
+        CMP BX, 5
+        JGE START
+        JMP NOINPUT
+PRINT:  SHL BX, 1
+        MOV DX, TABLE[BX]
+        MOV AH, 09H
+        INT 21H
+        MOV AH, 4CH
+        MOV AL, 00H
+        INT 21H
+
+HARE    DB 'HARE', 0DH, 0AH, '$'
+KUMORI  DB 'KUMORI', 0DH, 0AH, '$'
+AME     DB 'AME', 0DH, 0AH, '$'
+ANOTI   DB 'AME NOTI HARE', 0DH, 0AH, '$'
+KNOTI   DB 'KUMORI NOTI AME', 0DH, 0AH, '$'
+
+TABLE   DW OFFSET HARE, OFFSET KUMORI, OFFSET AME
+        DW OFFSET ANOTI, OFFSET KNOTI
+
+CODE    ENDS
+        END START
